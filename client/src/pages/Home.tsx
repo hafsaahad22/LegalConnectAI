@@ -26,11 +26,9 @@ const features = [
 
 const commonQuestions = [
   "Can police arrest without a warrant?",
-  "What are women's inheritance rights?", 
+  "What are dowry laws in Pakistan?", 
   "How to file a cybercrime complaint?",
-  "What are my tenant rights?",
-  "How to file for divorce?",
-  "What constitutes dowry harassment?"
+  "What does the Constitution say about women's rights?"
 ];
 
 const featuredLawyers = [

@@ -26,9 +26,9 @@ interface ChatWidgetProps {
 
 const suggestedQuestions = [
   "Can police arrest without a warrant?",
-  "What does the Constitution say about women's rights?",
+  "What are dowry laws in Pakistan?",
   "How can I file a cybercrime complaint?",
-  "What are dowry laws in Pakistan?"
+  "What does the Constitution say about women's rights?"
 ];
 
 export default function ChatWidget({ isOpen, onToggle, initialQuestion, onQuestionSet }: ChatWidgetProps) {
