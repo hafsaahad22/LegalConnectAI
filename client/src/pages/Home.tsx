@@ -122,45 +122,45 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-6 py-24">
-        <div className="text-center max-w-4xl mx-auto">
-          <h1 className="text-6xl font-bold minimal-dark mb-8 leading-tight tracking-tight">
+      <section className="max-w-6xl mx-auto px-6 py-16">
+        <div className="text-center max-w-3xl mx-auto">
+          <h1 className="text-3xl md:text-4xl font-semibold minimal-dark mb-6 leading-tight tracking-tight">
             Understand Pakistani Law in 
-            <span className="minimal-accent"> Plain Terms</span>
+            <span className="text-gray-600"> Plain Terms</span>
           </h1>
-          <p className="text-xl minimal-grey mb-12 leading-relaxed font-medium max-w-3xl mx-auto">
+          <p className="text-base minimal-grey mb-8 leading-relaxed max-w-2xl mx-auto">
             Get instant legal guidance powered by AI trained on the Pakistani Constitution, 
             Supreme Court cases, and expert legal knowledge. Available in Urdu and English.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex justify-center">
             <Button 
               onClick={() => setIsChatOpen(true)}
-              className="bg-minimal-dark text-white px-8 py-4 text-lg font-semibold hover:bg-gray-800 rounded-xl"
+              className="bg-minimal-dark text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 rounded-lg"
             >
               Start Legal Chat
-              <ArrowRight className="h-5 w-5 ml-2" />
+              <ArrowRight className="h-4 w-4 ml-2" />
             </Button>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="bg-gray-50 py-24">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl font-bold minimal-dark mb-6 tracking-tight">Why Choose LegalConnect?</h2>
-            <p className="text-xl minimal-grey font-medium">Advanced AI legal assistance built specifically for Pakistani citizens</p>
+      <section className="bg-gray-50 py-16">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl font-semibold minimal-dark mb-3 tracking-tight">Why Choose LegalConnect?</h2>
+            <p className="text-sm minimal-grey">Advanced AI legal assistance built specifically for Pakistani citizens</p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((feature, index) => (
-              <Card key={index} className="border border-gray-200 hover:shadow-lg transition-all duration-300 hover:border-gray-300">
-                <CardContent className="p-8">
-                  <div className="w-14 h-14 bg-minimal-dark rounded-xl flex items-center justify-center mb-6">
-                    <Check className="text-white h-7 w-7" />
+              <Card key={index} className="border border-gray-200 hover:shadow-sm transition-all duration-300 hover:border-gray-300">
+                <CardContent className="p-5">
+                  <div className="w-8 h-8 bg-gray-800 rounded-lg flex items-center justify-center mb-4">
+                    <Check className="text-white h-4 w-4" />
                   </div>
-                  <h3 className="font-semibold minimal-dark mb-3 text-lg">{feature.title}</h3>
-                  <p className="text-sm minimal-grey leading-relaxed">{feature.description}</p>
+                  <h3 className="font-medium minimal-dark mb-2 text-sm">{feature.title}</h3>
+                  <p className="text-xs minimal-grey leading-relaxed">{feature.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -169,25 +169,25 @@ export default function Home() {
       </section>
 
       {/* Common Questions Section */}
-      <section className="py-24">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl font-bold minimal-dark mb-6 tracking-tight">Common Legal Questions</h2>
-            <p className="text-xl minimal-grey font-medium">Click any question to get instant legal guidance</p>
+      <section className="py-16">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl font-semibold minimal-dark mb-3 tracking-tight">Common Legal Questions</h2>
+            <p className="text-sm minimal-grey">Click any question to get instant legal guidance</p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-3 max-w-3xl mx-auto">
             {commonQuestions.map((question, index) => (
               <Button
                 key={index}
                 onClick={() => handleQuestionClick(question)}
                 variant="ghost"
-                className="text-left p-6 bg-white rounded-xl border border-gray-200 hover:border-gray-300 hover:shadow-sm transition-all h-auto group"
+                className="text-left p-4 bg-white rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-sm transition-all h-auto group"
               >
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-minimal-accent rounded-full mt-3 flex-shrink-0 group-hover:bg-minimal-dark transition-colors"></div>
+                <div className="flex items-start space-x-2">
+                  <div className="w-1.5 h-1.5 bg-gray-600 rounded-full mt-2 flex-shrink-0 group-hover:bg-gray-800 transition-colors"></div>
                   <div>
-                    <p className="font-medium minimal-dark text-sm leading-relaxed">{question}</p>
+                    <p className="font-medium minimal-dark text-xs leading-relaxed">{question}</p>
                   </div>
                 </div>
               </Button>
@@ -197,64 +197,53 @@ export default function Home() {
       </section>
 
       {/* Featured Lawyers Section */}
-      <section className="bg-gray-50 py-24">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl font-bold minimal-dark mb-6 tracking-tight">Featured Legal Experts</h2>
-            <p className="text-xl minimal-grey font-medium">Connect with verified Pakistani lawyers specialized in different legal areas</p>
+      <section className="bg-gray-50 py-16">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl font-semibold minimal-dark mb-3 tracking-tight">Featured Legal Experts</h2>
+            <p className="text-sm minimal-grey">Connect with verified Pakistani lawyers specialized in different legal areas</p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             {featuredLawyers.map((lawyer) => (
-              <Card key={lawyer.id} className="border border-gray-200 hover:shadow-xl transition-all duration-300 hover:border-gray-300 bg-white">
-                <CardContent className="p-6">
-                  <div className="text-center mb-4">
-                    <div className="w-16 h-16 bg-gradient-to-br from-gray-800 to-gray-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <span className="text-white font-semibold text-lg">
+              <Card key={lawyer.id} className="border border-gray-200 hover:shadow-sm transition-all duration-300 hover:border-gray-300 bg-white">
+                <CardContent className="p-4">
+                  <div className="text-center mb-3">
+                    <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <span className="text-white font-medium text-xs">
                         {lawyer.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
                       </span>
                     </div>
-                    <h3 className="font-semibold minimal-dark text-lg mb-1">{lawyer.name}</h3>
-                    <Badge variant="secondary" className="mb-2">{lawyer.specialization}</Badge>
+                    <h3 className="font-medium minimal-dark text-sm mb-1">{lawyer.name}</h3>
+                    <p className="text-xs text-gray-600">{lawyer.specialization}</p>
                   </div>
                   
-                  <div className="space-y-3 text-sm">
+                  <div className="space-y-2 text-xs">
                     <div className="flex items-center justify-between">
-                      <span className="minimal-grey">Experience</span>
-                      <span className="font-medium">{lawyer.experience} years</span>
+                      <span className="text-gray-500">Experience</span>
+                      <span className="font-medium text-gray-800">{lawyer.experience} years</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="minimal-grey">Cases Won</span>
-                      <span className="font-medium">{lawyer.cases}+</span>
+                      <span className="text-gray-500">Cases</span>
+                      <span className="font-medium text-gray-800">{lawyer.cases}+</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="minimal-grey">Rating</span>
-                      <div className="flex items-center space-x-1">
-                        <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                        <span className="font-medium">{lawyer.rating}</span>
-                      </div>
+                      <span className="text-gray-500">Rating</span>
+                      <span className="font-medium text-gray-800">{lawyer.rating}/5</span>
                     </div>
                     <div className="flex items-center space-x-1">
-                      <MapPin className="h-4 w-4 minimal-grey" />
-                      <span className="minimal-grey text-sm">{lawyer.region}</span>
+                      <MapPin className="h-3 w-3 text-gray-500" />
+                      <span className="text-gray-500 text-xs">{lawyer.region}</span>
                     </div>
                   </div>
                   
-                  <div className="mt-4 pt-4 border-t border-gray-100">
-                    <p className="text-xs minimal-grey mb-4 leading-relaxed">{lawyer.bio}</p>
-                    <div className="flex flex-wrap gap-1 mb-4">
-                      {lawyer.specialties.slice(0, 2).map((specialty, idx) => (
-                        <Badge key={idx} variant="outline" className="text-xs">{specialty}</Badge>
-                      ))}
-                    </div>
+                  <div className="mt-3 pt-3 border-t border-gray-100">
                     <div className="flex space-x-2">
-                      <Button size="sm" className="flex-1 bg-minimal-dark text-white hover:bg-gray-800 text-xs">
-                        <Phone className="h-3 w-3 mr-1" />
+                      <Button size="sm" className="flex-1 bg-gray-800 text-white hover:bg-gray-900 text-xs py-1.5">
                         Contact
                       </Button>
-                      <Button size="sm" variant="outline" className="flex-1 text-xs">
-                        <Mail className="h-3 w-3 mr-1" />
-                        Email
+                      <Button size="sm" variant="outline" className="flex-1 text-xs py-1.5 border-gray-300">
+                        Profile
                       </Button>
                     </div>
                   </div>
@@ -266,19 +255,19 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-minimal-dark py-20">
+      <section className="bg-gray-800 py-12">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold text-white mb-6 tracking-tight">
+          <h2 className="text-2xl font-semibold text-white mb-3 tracking-tight">
             Ready to Get Legal Guidance?
           </h2>
-          <p className="text-xl text-gray-300 mb-10 font-medium">
+          <p className="text-sm text-gray-300 mb-6">
             Start a conversation with our AI legal assistant trained on Pakistani law
           </p>
           <Button 
             onClick={() => setIsChatOpen(true)}
-            className="bg-white text-black px-8 py-4 text-lg font-semibold hover:bg-gray-100 rounded-xl"
+            className="bg-white text-black px-6 py-3 text-sm font-medium hover:bg-gray-100 rounded-lg"
           >
-            <MessageCircle className="h-5 w-5 mr-2" />
+            <MessageCircle className="h-4 w-4 mr-2" />
             Start Legal Chat Now
           </Button>
         </div>
