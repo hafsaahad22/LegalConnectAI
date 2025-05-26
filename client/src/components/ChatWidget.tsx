@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { MessageCircle, X, Send, Mic, Bot, User, Minimize2, Maximize2 } from "lucide-react";
+import { MessageCircle, X, Send, Bot, Minimize2, Maximize2 } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
@@ -22,22 +22,34 @@ interface ChatWidgetProps {
   onToggle: (open: boolean) => void;
   initialQuestion?: string;
   onQuestionSet?: () => void;
+  language: "en" | "ur";
 }
 
-const suggestedQuestions = [
-  "Can police arrest without a warrant?",
-  "What are dowry laws in Pakistan?",
-  "How can I file a cybercrime complaint?",
-  "What does the Constitution say about women's rights?"
-];
 
 export default function ChatWidget({ isOpen, onToggle, initialQuestion, onQuestionSet }: ChatWidgetProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isVoiceRecording, setIsVoiceRecording] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
+  const [language, setLanguage] = useState<"en" | "ur">("en");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+
+  const toggleLanguage = () => setLanguage(prev => (prev === "en" ? "ur" : "en"));
+
+  const suggestedQuestions = language === "en"
+    ? [
+        "Can police arrest without a warrant?",
+        "What are dowry laws in Pakistan?",
+        "How can I file a cybercrime complaint?",
+        "What does the Constitution say about women's rights?"
+      ]
+    : [
+        "کیا پولیس بغیر وارنٹ کے گرفتار کر سکتی ہے؟",
+        "پاکستان میں جہیز کے قوانین کیا ہیں؟",
+        "میں سائبر کرائم کی شکایت کیسے درج کراؤں؟",
+        "آئین خواتین کے حقوق کے بارے میں کیا کہتا ہے؟"
+      ];
 
   const chatMutation = useMutation({
     mutationFn: async (request: ChatRequest) => {
@@ -47,14 +59,14 @@ export default function ChatWidget({ isOpen, onToggle, initialQuestion, onQuesti
     onSuccess: (response, variables) => {
       const botMessage: Message = {
         id: Date.now().toString(),
-        type: 'bot',
+        type: "bot",
         content: "Legal Analysis Complete",
         response,
         timestamp: new Date()
       };
       setMessages(prev => [...prev, botMessage]);
     },
-    onError: (error) => {
+    onError: () => {
       toast({
         title: "Error",
         description: "Failed to get legal response. Please try again.",
@@ -80,7 +92,7 @@ export default function ChatWidget({ isOpen, onToggle, initialQuestion, onQuesti
 
     const userMessage: Message = {
       id: Date.now().toString(),
-      type: 'user',
+      type: "user",
       content: question,
       timestamp: new Date()
     };
@@ -90,12 +102,12 @@ export default function ChatWidget({ isOpen, onToggle, initialQuestion, onQuesti
 
     chatMutation.mutate({
       question,
-      language: "en"
+      language
     });
   };
 
-  const handleSuggestedQuestion = (question: string) => {
-    setInputValue(question);
+  const handleSuggestedQuestion = (q: string) => {
+    setInputValue(q);
     setTimeout(() => sendMessage(), 100);
   };
 
@@ -103,112 +115,8 @@ export default function ChatWidget({ isOpen, onToggle, initialQuestion, onQuesti
     setInputValue(transcript);
   };
 
-  const formatLegalResponse = (response: LegalResponse) => (
-    <div className="space-y-4 text-sm">
-      <div className="bg-gray-50 rounded-lg p-4">
-        <h4 className="font-semibold minimal-dark mb-2 flex items-center">
-          <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
-          DEFINITION
-        </h4>
-        <p className="text-gray-700">{response.definition}</p>
-      </div>
-      
-      <div className="bg-gray-50 rounded-lg p-4">
-        <h4 className="font-semibold minimal-dark mb-2 flex items-center">
-          <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-          YOUR QUESTION EXPLAINED
-        </h4>
-        <p className="text-gray-700">{response.explanation}</p>
-      </div>
-
-      {response.constitutionalArticles.length > 0 && (
-        <div className="bg-gray-50 rounded-lg p-4">
-          <h4 className="font-semibold minimal-dark mb-3 flex items-center">
-            <span className="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
-            CONSTITUTIONAL ARTICLES
-          </h4>
-          <div className="space-y-3">
-            {response.constitutionalArticles.map((article, index) => (
-              <div key={index} className="bg-white rounded-lg p-3 border border-gray-200">
-                <div className="font-medium text-gray-900 mb-1">Article {article.article}: "{article.title}"</div>
-                <div className="text-sm text-gray-600">{article.summary}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {response.supremeCourtCases.length > 0 && (
-        <div className="bg-gray-50 rounded-lg p-4">
-          <h4 className="font-semibold minimal-dark mb-3 flex items-center">
-            <span className="w-2 h-2 bg-red-500 rounded-full mr-2"></span>
-            SUPREME COURT CASES
-          </h4>
-          <div className="space-y-3">
-            {response.supremeCourtCases.map((case_, index) => (
-              <div key={index} className="bg-white rounded-lg p-3 border border-gray-200">
-                <div className="font-medium text-gray-900 mb-1">"{case_.title}"</div>
-                <div className="text-sm text-gray-600">{case_.summary}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {response.recommendedLawyers.length > 0 && (
-        <div className="bg-gray-50 rounded-lg p-4">
-          <h4 className="font-semibold minimal-dark mb-3 flex items-center">
-            <span className="w-2 h-2 bg-yellow-500 rounded-full mr-2"></span>
-            RECOMMENDED LAWYERS
-          </h4>
-          <div className="space-y-2">
-            {response.recommendedLawyers.map((lawyer, index) => (
-              <div key={index} className="bg-white rounded-lg p-3 border border-gray-200">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <div className="font-medium text-gray-900">{lawyer.name}</div>
-                    <div className="text-sm text-gray-600">{lawyer.area} • {lawyer.region}</div>
-                  </div>
-                  <Button size="sm" variant="outline" className="text-xs">Contact</Button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {response.followUpQuestions.length > 0 && (
-        <div className="bg-gray-50 rounded-lg p-4">
-          <h4 className="font-semibold minimal-dark mb-3 flex items-center">
-            <span className="w-2 h-2 bg-indigo-500 rounded-full mr-2"></span>
-            FOLLOW-UP QUESTIONS
-          </h4>
-          <div className="space-y-2">
-            {response.followUpQuestions.map((question, index) => (
-              <Button
-                key={index}
-                variant="ghost"
-                size="sm"
-                onClick={() => handleSuggestedQuestion(question)}
-                className="w-full text-left justify-start text-sm bg-white hover:bg-gray-100 border border-gray-200 h-auto p-3"
-              >
-                {question}
-              </Button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {response.usedFallback && (
-        <div className="text-xs text-gray-500 bg-yellow-50 p-3 rounded-lg border border-yellow-200">
-          <div className="flex items-center space-x-2">
-            <span className="w-2 h-2 bg-yellow-400 rounded-full"></span>
-            <span>Response generated using offline legal data (live data temporarily unavailable)</span>
-          </div>
-        </div>
-      )}
-    </div>
-  );
+  const chatHeight = isMinimized ? 'h-16' : 'h-[80vh] max-h-[600px]';
+  const chatWidth = 'w-[90vw] max-w-2xl';
 
   if (!isOpen) {
     return (
@@ -223,13 +131,10 @@ export default function ChatWidget({ isOpen, onToggle, initialQuestion, onQuesti
     );
   }
 
-  const chatHeight = isMinimized ? 'h-16' : 'h-[80vh] max-h-[600px]';
-  const chatWidth = 'w-[90vw] max-w-2xl';
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
       <Card className={`${chatWidth} ${chatHeight} shadow-2xl border border-gray-300 transition-all duration-300 flex flex-col`}>
-        {/* Chat Header */}
+        {/* Header */}
         <CardHeader className="bg-minimal-dark text-white p-4 rounded-t-lg flex-shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -240,25 +145,18 @@ export default function ChatWidget({ isOpen, onToggle, initialQuestion, onQuesti
                 <div className="font-semibold">LegalConnect AI</div>
                 <div className="text-xs text-gray-300 flex items-center">
                   <div className="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
-                  Pakistani Legal Assistant
+                  {language === "en" ? "Pakistani Legal Assistant" : "پاکستانی قانونی معاون"}
                 </div>
               </div>
             </div>
             <div className="flex items-center space-x-2">
-              <Button
-                onClick={() => setIsMinimized(!isMinimized)}
-                variant="ghost"
-                size="sm"
-                className="text-white hover:bg-white hover:bg-opacity-20 rounded-lg p-2"
-              >
+              <Button onClick={toggleLanguage} variant="ghost" size="sm" className="text-white text-xs p-2">
+                {language === "en" ? "اردو" : "EN"}
+              </Button>
+              <Button onClick={() => setIsMinimized(!isMinimized)} variant="ghost" size="sm" className="text-white p-2">
                 {isMinimized ? <Maximize2 className="h-4 w-4" /> : <Minimize2 className="h-4 w-4" />}
               </Button>
-              <Button
-                onClick={() => onToggle(false)}
-                variant="ghost"
-                size="sm"
-                className="text-white hover:bg-white hover:bg-opacity-20 rounded-lg p-2"
-              >
+              <Button onClick={() => onToggle(false)} variant="ghost" size="sm" className="text-white p-2">
                 <X className="h-4 w-4" />
               </Button>
             </div>
@@ -267,35 +165,29 @@ export default function ChatWidget({ isOpen, onToggle, initialQuestion, onQuesti
 
         {!isMinimized && (
           <>
-            {/* Chat Messages */}
+            {/* Body */}
             <div className="flex-1 p-4 overflow-y-auto bg-gray-50">
               {messages.length === 0 && (
                 <div className="mb-4">
                   <Card className="bg-white shadow-sm border border-gray-200">
                     <CardContent className="p-6">
-                      <div className="flex items-start space-x-3">
-                        <div className="w-8 h-8 bg-minimal-dark rounded-full flex items-center justify-center flex-shrink-0">
-                          <Bot className="text-white h-4 w-4" />
-                        </div>
-                        <div className="flex-1">
-                          <div className="text-sm text-gray-900 mb-3">
-                            Hi! I'm your Pakistani Legal AI Assistant. Ask me anything about Pakistani law, Constitution, or legal procedures.
-                          </div>
-                          <div className="text-xs text-gray-500 mb-4">You can type or use voice input in Urdu or English</div>
-                          <div className="grid grid-cols-1 gap-2">
-                            {suggestedQuestions.map((question, index) => (
-                              <Button
-                                key={index}
-                                onClick={() => handleSuggestedQuestion(question)}
-                                variant="ghost"
-                                size="sm"
-                                className="text-left justify-start text-sm bg-gray-50 hover:bg-gray-100 border border-gray-200 h-auto p-3"
-                              >
-                                {question}
-                              </Button>
-                            ))}
-                          </div>
-                        </div>
+                      <div className="text-sm text-gray-900 mb-3">
+                        {language === "en"
+                          ? "Hi! I'm your Pakistani Legal AI Assistant. Ask me anything about Pakistani law, Constitution, or legal procedures."
+                          : "سلام! میں آپ کا پاکستانی قانونی معاون ہوں۔ مجھ سے قانون، آئین یا قانونی طریقہ کار کے بارے میں کچھ بھی پوچھیں۔"}
+                      </div>
+                      <div className="text-xs text-gray-500 mb-4">
+                        {language === "en"
+                          ? "You can type or use voice input in Urdu or English"
+                          : "آپ اردو یا انگریزی میں لکھ یا بول سکتے ہیں"}
+                      </div>
+                      <div className="grid grid-cols-1 gap-2">
+                        {suggestedQuestions.map((q, i) => (
+                          <Button key={i} onClick={() => handleSuggestedQuestion(q)} variant="ghost" size="sm"
+                            className="text-left justify-start text-sm bg-gray-50 hover:bg-gray-100 border border-gray-200 h-auto p-3">
+                            {q}
+                          </Button>
+                        ))}
                       </div>
                     </CardContent>
                   </Card>
@@ -316,7 +208,7 @@ export default function ChatWidget({ isOpen, onToggle, initialQuestion, onQuesti
                             <Bot className="text-white h-4 w-4" />
                           </div>
                           <div className="flex-1">
-                            {message.response ? formatLegalResponse(message.response) : message.content}
+                            {message.response ? message.response.explanation : message.content}
                           </div>
                         </div>
                       </CardContent>
@@ -326,29 +218,15 @@ export default function ChatWidget({ isOpen, onToggle, initialQuestion, onQuesti
               ))}
 
               {chatMutation.isPending && (
-                <div className="mb-4">
-                  <Card className="bg-white shadow-sm border border-gray-200">
-                    <CardContent className="p-6">
-                      <div className="flex items-start space-x-3">
-                        <div className="w-8 h-8 bg-minimal-dark rounded-full flex items-center justify-center flex-shrink-0">
-                          <Bot className="text-white h-4 w-4" />
-                        </div>
-                        <div className="flex-1">
-                          <div className="text-sm text-gray-600 flex items-center">
-                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-600 mr-2"></div>
-                            Analyzing your legal question...
-                          </div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                <div className="text-sm text-gray-600 flex items-center">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-600 mr-2"></div>
+                  {language === "en" ? "Analyzing your legal question..." : "آپ کے سوال کا تجزیہ ہو رہا ہے..."}
                 </div>
               )}
-
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Chat Input */}
+            {/* Footer */}
             <div className="p-4 border-t bg-white rounded-b-lg flex-shrink-0">
               <div className="flex items-center space-x-3">
                 <div className="flex-1 relative">
@@ -356,7 +234,7 @@ export default function ChatWidget({ isOpen, onToggle, initialQuestion, onQuesti
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-                    placeholder="Ask your legal question in Urdu or English..."
+                    placeholder={language === "en" ? "Ask your legal question..." : "اپنا قانونی سوال لکھیں..."}
                     className="pr-12 focus:ring-minimal-dark focus:border-minimal-dark"
                     disabled={chatMutation.isPending}
                   />
@@ -375,7 +253,7 @@ export default function ChatWidget({ isOpen, onToggle, initialQuestion, onQuesti
                 </Button>
               </div>
               <div className="text-xs text-gray-500 mt-2 text-center">
-                🔒 Your conversations are private and secure
+                🔒 {language === "en" ? "Your conversations are private and secure" : "آپ کی بات چیت محفوظ ہے"}
               </div>
             </div>
           </>

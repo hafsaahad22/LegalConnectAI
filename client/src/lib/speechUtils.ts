@@ -1,4 +1,4 @@
-let recognition: SpeechRecognition | null = null;
+let recognition: SpeechReition | null = null;
 let isRecording = false;
 
 export function checkSpeechRecognitionSupport(): boolean {
